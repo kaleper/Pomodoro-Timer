@@ -1,12 +1,6 @@
 // Variables 
-let timeLeft = document.getElementById("time");
-let musicToggle = document.getElementById("toggle");
-let newTab = document.getElementById("openMain");
-let workTime = true;
-let workDuration = 25 * 60;
-let breakDuration = 5 * 60;
-let time = workDuration;
 let timerInterval;
+let playSound = true
 
 // Listeners for Buttons
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -15,7 +9,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else if (request.command === "stop") {
         endOfTimer();
     }
+    else if (request.command ==="playNoise"){
+        playNotificationSound();
+    }
+
 });
+
 
 // Link start button to function
 document.getElementById("startTimerButton").addEventListener('click', function() {
@@ -28,6 +27,9 @@ document.getElementById("pauseTimerButton").addEventListener('click', function()
 document.getElementById("stopTimerButton").addEventListener('click', function() {
     stopTimer();
 })
+document.getElementById("soundNotification").addEventListener('change', function() {
+    toggleSoundNotification();
+})
 
 
 // Functions 
@@ -37,9 +39,9 @@ function startTimer() {
     updateTimer();
     timerInterval  = setInterval(updateTimer,1000);
 }
-
+// Pause the timer but dont clear the time
 function pauseTimer() {
-    chrome.runtime.sendMessage({command:'start'});
+    chrome.runtime.sendMessage({command:'pause'});
     clearInterval(timerInterval);
     updateTimer();
 }
@@ -49,6 +51,21 @@ function stopTimer() {
     chrome.runtime.sendMessage({command:'stop'});
     clearInterval(timerInterval);
     updateTimer();
+}
+
+function toggleSoundNotification() {
+    playSound = !playSound;
+}
+
+
+function playNotificationSound() {
+    let notificationSound = new Audio('./bong.mp3');
+    notificationSound.play();
+    // var sound = document.getElementById('sound');
+    // sound.play();
+    // document.write('<audio id="player" src="bong.mp3">');
+    // document.getElementById('player').play();
+    
 }
 
 // Update the timer
@@ -65,6 +82,7 @@ function updateTimer(){
         }
     })
 }
+
 
 // Used for formatting time
 function padZero(num){
