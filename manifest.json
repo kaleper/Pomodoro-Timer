@@ -4,7 +4,14 @@
     "description": "Base Level Extension",
     "version": "1.0",
     "action": {
-      "default_popup": "./popup/hello.html",
-      "default_icon": "./images/hello_extensions.png"
-    }
+      "default_popup": "./popup/popup.html",
+      "default_icon": "./images/light-bulb.png"
+    },
+    "permissions": [
+      "tabs",
+      "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+      }
   }
