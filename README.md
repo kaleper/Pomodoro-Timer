@@ -25,4 +25,8 @@ Kalen P, Tahmid K, Thomas C
 #### Sources Used
 - Image Sources: <a href="https://www.flaticon.com/free-icons/brain" title="brain icons">Brain icons created by Freepik - Flaticon</a>
 
+- Checkmark Icon: <a href="https://fontawesome.com/icons/check?f=classic&s=solid"> Check Icon created by fontawesome - fontawesome</a>
+
+- Font Poppins: <a href="https://fonts.google.com/specimen/Poppins"> Poppins designed by Indian Type Foundry, Honny Pinhorn</a>
+
 - Sound source: <a href="https://pixabay.com/sound-effects/bong-105459/" title="gong"> Gong sound created by Pixabay - Pixabay</a>
