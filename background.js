@@ -1,86 +1,73 @@
-// Purpose of background.js is to be run in the background of chrome. popup.js sends messages
-// to the background to run certain functions.
+// background.js runs in chrome background. popup.js sends messages. popup.js sends messages to background.js to communicate.
 
-// Variables 
-let remainingTime;
+//Tracks remaining timer time 
+let remainingTime = 5;
+// Time in milliseconds to decrement timer by
 let timerInterval;
 
-// Message function handler
-// Will tell which function to call when the message is send
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.command === 'start') {
-    startTimer();
-  } else if(request.command == 'pause'){
-    pauseTimer();
-  }else if (request.command === 'stop') {
-    stopTimer();
-  } else if (request.command === 'getRemainingTime') {
-    sendResponse({ remainingTime });
+let defaultTime = 5;
+
+// Flag for timer running and paused
+let isTimerRunning = false;
+
+// Handles messages, invokes function based on message. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.command === 'start' && !isTimerRunning) {
+      startTimer();
+      sendResponse({ status: "Timer started" });
+  } else if (request.command === 'pause') {
+      pauseTimer();
+      sendResponse({ status: "Timer paused" });
+  } else if (request.command === 'reset') {
+      resetTimer();
+      sendResponse({ status: "Timer reset" });
   }
+  // Sends remaining time to popup.js
+  else if (request.command === 'getRemainingTime') {
+      sendResponse({ remainingTime: remainingTime });
+  }
+  // Add a catch-all response for unhandled commands
+  else {
+      sendResponse({ status: "Command not recognized" });
+  }
+  return true; // Keep the message channel open for async response
 });
 
-// Function to start the countdown: minutes 1 second every interval
+// Starts timer countdown
 function startTimer() {
-  if (remainingTime === undefined){
-    remainingTime = 60;
-  } // 30 minutes
-  sendRemainingTime();
-  timerInterval = setInterval(function () {
-    if (remainingTime <= 0){
-        chrome.runtime.sendMessage({ command: 'playNoise' });
-        // if(playSound === true) {
-        //     playNotificationSound();
-        // }
-        clearInterval(timerInterval);
-        stopTimer();
-    }else{
-        remainingTime--;
-        sendRemainingTime();
+    if (!isTimerRunning) {
+        isTimerRunning = true;
+        remainingTime = remainingTime || defaultTime; // or your default time
+        timerInterval = setInterval(() => {
+            remainingTime--;
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                showNotification('Time is up!');
+                remainingTime = defaultTime; // Reset to default or a defined work/break period
+            }
+        }, 1000);
     }
-  }, 1000);
-  
 }
 
 // Stops and clears the remaining time
-function stopTimer() {
+function resetTimer() {
   clearInterval(timerInterval);
-  remainingTime = 0;
-  sendRemainingTime();
+  remainingTime = defaultTime; // Reset to default time
+  isTimerRunning = false;
 }
 
-// TODO: fix the pause time as its not saving the remaining time and reseting to 30mins again.
+// Pauses timer 
 function pauseTimer() {
     clearInterval(timerInterval);
-    sendRemainingTime();
+    isTimerRunning = false;
   }
 
-  // Set the remaining time left
-function sendRemainingTime() {
-  chrome.runtime.sendMessage({ command: 'updateTimer', remainingTime });
+function showNotification(message) {
+  chrome.notifications.create('', {
+      title: 'Pomodoro Timer',
+      message: message,
+      type: 'basic',
+      iconUrl: './images/light-bulb.png'
+  });
 }
-
-/**
- * Plays audio files from extension service workers
- * @param {string} source - path of the audio file
- * @param {number} volume - volume of the playback
- */
-async function playSound(source = 'default.wav', volume = 1) {
-    await createOffscreen();
-    await chrome.runtime.sendMessage({ play: { source, volume } });
-}
-
-/**
- * Plays audio files from extension service workers
- * @param {string} source - path of the audio file
- * @param {number} volume - volume of the playback
- */
-async function playSound(source = 'bong.mp3', volume = 5) {
-
-    await chrome.runtime.sendMessage({ play: { source, volume } });
-}
-
-
-
-
-
-
