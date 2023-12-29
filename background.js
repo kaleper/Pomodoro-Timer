@@ -1,54 +1,64 @@
-// Purpose of background.js is to be run in the background of chrome. popup.js sends messages
-// to the background to run certain functions.
+// background.js runs in chrome background. popup.js sends messages. popup.js sends messages to background.js to communicate.
 
-// Variables 
+//Tracks remaining timer time 
 let remainingTime;
+// Time in milliseconds to decrement timer by
 let timerInterval;
 
-// Message function handler
-// Will tell which function to call when the message is send
+// Flags for 'Start' and 'Pause' buttons
+let started = false;
+let paused = false;
+
+// 40 Minutes - ** Change this to 3 seconds for testing**
+let defaultTime = 2400;
+
+// Handles messages, invokes function based on message. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === 'start') {
-    startTimer();
+    if (started === false) {
+      startTimer();
+      started = true;
+      paused = false;
+    }
   } else if(request.command == 'pause'){
-    pauseTimer();
-  }else if (request.command === 'stop') {
-    stopTimer();
+    if (paused === false) {
+      pauseTimer();
+      paused = true;
+      started = false;
+    }
+  }else if (request.command === 'reset') {
+    resetTimer();
   } else if (request.command === 'getRemainingTime') {
     sendResponse({ remainingTime });
   }
 });
 
-// Function to start the countdown: minutes 1 second every interval
+// Starts timer countdown
 function startTimer() {
+  // Set to default time to initialize
   if (remainingTime === undefined){
-    remainingTime = 60;
-  } // 30 minutes
+    remainingTime = defaultTime;
+  } 
   sendRemainingTime();
   timerInterval = setInterval(function () {
     if (remainingTime <= 0){
-        chrome.runtime.sendMessage({ command: 'playNoise' });
-        // if(playSound === true) {
-        //     playNotificationSound();
-        // }
         clearInterval(timerInterval);
-        stopTimer();
     }else{
         remainingTime--;
         sendRemainingTime();
     }
   }, 1000);
-  
+
 }
 
 // Stops and clears the remaining time
-function stopTimer() {
-  clearInterval(timerInterval);
-  remainingTime = 0;
-  sendRemainingTime();
+function resetTimer() {
+  started = false;
+  paused = false;
+  remainingTime = defaultTime;
 }
 
-// TODO: fix the pause time as its not saving the remaining time and reseting to 30mins again.
+// Pauses timer 
 function pauseTimer() {
     clearInterval(timerInterval);
     sendRemainingTime();
@@ -58,29 +68,3 @@ function pauseTimer() {
 function sendRemainingTime() {
   chrome.runtime.sendMessage({ command: 'updateTimer', remainingTime });
 }
-
-/**
- * Plays audio files from extension service workers
- * @param {string} source - path of the audio file
- * @param {number} volume - volume of the playback
- */
-async function playSound(source = 'default.wav', volume = 1) {
-    await createOffscreen();
-    await chrome.runtime.sendMessage({ play: { source, volume } });
-}
-
-/**
- * Plays audio files from extension service workers
- * @param {string} source - path of the audio file
- * @param {number} volume - volume of the playback
- */
-async function playSound(source = 'bong.mp3', volume = 5) {
-
-    await chrome.runtime.sendMessage({ play: { source, volume } });
-}
-
-
-
-
-
-

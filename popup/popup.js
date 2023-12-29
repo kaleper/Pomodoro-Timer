@@ -1,75 +1,77 @@
-// Variables 
+// Time in milliseconds to decrement timer by
 let timerInterval;
-let playSound = true
 
-// Listeners for Buttons
+// Flags for 'Start' and 'Pause' buttons
+let started = false;
+let paused = false;
+
+// 40 Minutes - ** Change this to 3 seconds for testing **
+let defaultTime = 2400;
+
+// Listeners for Buttons. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.command === "start") {
-        startTimer();
-    } else if (request.command === "stop") {
-        endOfTimer();
-    }
-    else if (request.command ==="playNoise"){
-        playNotificationSound();
-    }
-
+        if (started === false) {
+            startTimer();
+            started = true;
+            paused = false;
+        }
+    } else if(request.command == 'pause'){
+        if (paused === false) {
+            pauseTimer();
+            paused = true;
+            started = false;
+          }
+      }else if (request.command === 'reset') {
+        resetTimer();
+      }
 });
 
-
-// Link start button to function
+// Link 'Start' button to html element
 document.getElementById("startTimerButton").addEventListener('click', function() {
     startTimer();
 })
+
+// Link 'Start' button to html element
 document.getElementById("pauseTimerButton").addEventListener('click', function() {
     pauseTimer();
 })
 
-document.getElementById("stopTimerButton").addEventListener('click', function() {
-    stopTimer();
-})
-document.getElementById("soundNotification").addEventListener('change', function() {
-    toggleSoundNotification();
+// Link 'Reset' button to html element
+document.getElementById("resetTimerButton").addEventListener('click', function() {
+    resetTimer();
 })
 
 
-// Functions 
-// Start the timer count down
+// Starts timer countdown
 function startTimer() {
     chrome.runtime.sendMessage({command:'start'});
     updateTimer();
+
+    // Decrements by 1 second
     timerInterval  = setInterval(updateTimer,1000);
+
 }
-// Pause the timer but dont clear the time
+// Pauses timer, preserving time 
 function pauseTimer() {
     chrome.runtime.sendMessage({command:'pause'});
     clearInterval(timerInterval);
     updateTimer();
 }
 
-//End the timer count down
-function stopTimer() {
-    chrome.runtime.sendMessage({command:'stop'});
-    clearInterval(timerInterval);
+// Resets timer to default
+function resetTimer() {
+    chrome.runtime.sendMessage({command:'reset'});
+    // Resets 'Start' and 'Pause' button flags 
+    started = false;
+    paused = false;
+
+    // Resets remaining time 
+    remainingTime = defaultTime;
     updateTimer();
 }
 
-function toggleSoundNotification() {
-    playSound = !playSound;
-}
-
-
-function playNotificationSound() {
-    let notificationSound = new Audio('./bong.mp3');
-    notificationSound.play();
-    // var sound = document.getElementById('sound');
-    // sound.play();
-    // document.write('<audio id="player" src="bong.mp3">');
-    // document.getElementById('player').play();
-    
-}
-
-// Update the timer
-// basically get the remaining time and format it into the text to display + update the time to see 
+// Updates timer - formats remaining time to be displayed 
 function updateTimer(){
     chrome.runtime.sendMessage({command:'getRemainingTime'},(response) =>{
         if (response && response.remainingTime){
@@ -77,24 +79,22 @@ function updateTimer(){
             const seconds = response.remainingTime % 60;
             document.getElementById('time').textContent=`${padZero(minutes)}:${padZero(seconds)}`; 
         }
+        // If timer has reached zero, displays zero.
         else{
             document.getElementById('time').textContent=`00:00`;
         }
     })
 }
 
-
-// Used for formatting time
+// Pads with zero when timer <10 minutes
 function padZero(num){
     return num < 10 ?`0${num}` : num;
 }
 
-
-//Opening Tab
+// Opens tab to extenion's page
 document.getElementById("openMain").addEventListener('click', function() {
+    console.log("test");
     chrome.tabs.create({
         url: "main.html"
       });
 })
-
-

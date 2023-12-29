@@ -1,17 +1,21 @@
+/* Styles for whole page */
 * {
     box-sizing: border-box;
     font-family: 'Poppins', Helvetica, Arial, sans-serif;
 }
 
+/* Popup backgorund */
 body {
 background-color: rgb(236, 227, 206);
 }
 
+/* 'Pomodoro Timer' header */
 h1{
     text-align: center;
     color: rgb(58, 77, 57);
 }
 
+/* 'Start', 'Pause' and 'Reset' buttons */
 #controlsContainer {
     display: flex;
     justify-content: center;
@@ -19,6 +23,7 @@ h1{
     margin-bottom: 10px;
 }
 
+/* All buttons */
 button {
     border:none;
     border-radius: 5px;
@@ -34,6 +39,7 @@ button:hover {
     background-color: rgb(58, 77, 57);
 }
 
+/* 'Extension Page' button and 'Alarm' checkbox */
 #bottomButtonContainer {
     display:flex;
     justify-content: space-between;
@@ -41,6 +47,7 @@ button:hover {
     margin-bottom:10px;
 }
 
+/* 'Alarm' Text */
 #alarm {
     font-weight: 500;
     color: rgb(58, 77, 57);
@@ -55,11 +62,12 @@ button:hover {
    
 }
 
+/* 'Extension Page' button */
 #openMain {
     margin-left: 5px;
 }
 
-
+/* 'Alarm' checkbox */
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
@@ -75,12 +83,15 @@ input[type="checkbox"] {
  
 }
 
+/* 'Alarm' checkbox text */
 label[for="check"] {
     color: rgb(58, 77, 57); 
     font-size: 0.9rem;
     cursor : pointer;
     
 }
+
+/* 'Alarm' checkbox checked - the check mark */
 input[type="checkbox"]:after {
    font-family: "Font Awesome 6 free";
    content:"\f00c";
@@ -91,15 +102,18 @@ input[type="checkbox"]:after {
   
 }
 
+/* Darkens checkbox upon hover */
 input[type="checkbox"]:hover {
     transition: 0.5s;
     background-color: rgb(58, 77, 57);
 }
 
+/* Darkens checked 'Alarm' box */
 input[type="checkbox"]:checked {
     background-color:rgb(79, 111, 82);
 }
 
+/* Allows 'Alarm' checkbox to be displayed */
 input[type="checkbox"]:checked:after {
     display:block;
 }
