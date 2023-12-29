@@ -6,6 +6,8 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     <link rel="stylesheet" href="popup.css">
 
+    
+
     <!-- Font Awesome Icon, Checkbox-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -16,24 +18,24 @@
 </head>
 <body>
     <h1>Pomodoro Timer</h1>
-    <h1 id="time">00:00</h1>
+    <h1 id="timerDisplay">00:00</h1>
     <div>
         <div id="controlsContainer">
             <button type="button" id="startTimerButton">Start</button>
             <button type="button" id="pauseTimerButton">Pause</button>
-            <button type="button" id="stopTimerButton">End</button>
+            <button type="button" id="resetTimerButton">Reset</button>
           
         </div>    
-        <!-- music player  -->
+        <!-- Youtube Music Player  -->
         <div container = "musicContainer">
           <iframe id="musicPlayer" width="300" height="185" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
         </div>
+        <!-- 'Extension Page' button & 'Alarm checkbox' -->
         <div id = "bottomButtonContainer">
-            <button type = "button" id ="openMain">Extension Page</button>
+            <button type = "button" id="openMain">Extension Page</button>
             <div class="checkboxContainer">
                 <input type="checkbox" id="check"> 
                 <label for = "check"> Alarm
-                </label>
                 </label>
             </div>
         </div>
