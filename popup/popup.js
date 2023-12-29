@@ -69,6 +69,7 @@ function resetTimer() {
     // Resets remaining time 
     remainingTime = defaultTime;
     updateTimer();
+    pauseTimer();
 }
 
 // Updates timer - formats remaining time to be displayed 
