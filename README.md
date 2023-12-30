@@ -7,10 +7,9 @@ A chrome extension based on the Pomodoro Technique, a time-management method wit
 #### TODO:
 
  > **Priority:**
- > (1) Implement an alert message to inform client when timer is finished
- > (2) Implement breaks and alert messages 
- > (3) main.html GUI
- > (4) Remove redundant code
+ > (1) Implement breaks and alert messages
+ > (2) Settings window from main page to set custom break / work durations? 
+ > (2) main.html GUI
 
 
 #### If Time Permits:

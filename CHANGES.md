@@ -2,12 +2,16 @@ version 1.0.0 (12-27-2023)
 ==========================
 * Initial bare bone version that runs the pomodoro app with bugs.
 
-version 1.0.1 (12-28-203)
+version 1.0.1 (12-28-2023)
 ==========================
-* 
-* 
+
 * popup.js UI styled and formatted
 * Extension page now redirects to main.html
 * Fixed timer bugs - multiple start, pause, or reset buttons cliks no longer break timer
 * Formatted code for enhanced readability
 * Added code comments 
+
+version 1.0.2 (12-30-2023) {
+* Added break functionality
+}
+
