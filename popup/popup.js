@@ -18,6 +18,11 @@ document.getElementById('breakTimerButton').addEventListener('click', function (
     chrome.runtime.sendMessage({command: 'break'});
 });
 
+//Link 'Sound' checkbox to html element
+document.getElementById('soundCheckbox').addEventListener('click', function () {
+    chrome.runtime.sendMessage({command: 'sound'});
+});
+
 // Updates timer - formats remaining time to be displayed 
 function updateDisplay() {
     chrome.runtime.sendMessage({ command: 'getRemainingTime' }, function(response) {

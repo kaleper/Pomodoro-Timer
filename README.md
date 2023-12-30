@@ -2,7 +2,7 @@
 A chrome extension based on the Pomodoro Technique, a time-management method with time specified intervals of work with breaks inbetween.
 
 #### Bugs:
-> - 'Alarm' checkbox does not allow a sound notification to be played when checked
+> - ~1s timer delay on button actions
 
 #### TODO:
 
@@ -15,6 +15,7 @@ A chrome extension based on the Pomodoro Technique, a time-management method wit
 #### If Time Permits:
 
 > **Priority:**
+> (1) Custom music playing
 > (1) Stretch recommendations
 > (2) Website redirecting  
 > (3) Statistics enabling 

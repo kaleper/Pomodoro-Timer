@@ -10,6 +10,8 @@ let breakTime = 7;
 // Time in milliseconds to decrement timer by
 let timerInterval;
 
+let soundNotification = true;
+
 // Flag for timer running and paused
 let isTimerRunning = false;
 
@@ -31,7 +33,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   // Sends remaining time to popup.js
   else if (request.command === 'getRemainingTime') {
       sendResponse({ remainingTime: remainingTime });
-  }
+  } else if (request.command === 'sound') {
+     toggleSound();
+  } 
   // Add a catch-all response for unhandled commands
   else {
       sendResponse({ status: "Command not recognized" });
@@ -50,6 +54,9 @@ function startTimer() {
                 clearInterval(timerInterval);
                 isTimerRunning = false;
                 showNotification('Work time is up!');
+                if (soundNotification) {
+                    playSound();
+                }
                 remainingTime = defaultTime; // Reset to default or a defined work/break period
             }
         }, 1000);
@@ -67,6 +74,9 @@ function breakTimer() {
                 clearInterval(timerInterval);
                 isTimerRunning = false;
                 showNotification('Break time is up!');
+                if (soundNotification) {
+                    playSound();
+                }
                 remainingTime = defaultTime; // Reset to default or a defined work/break period
             }
         }, 1000);
@@ -95,4 +105,25 @@ function showNotification(message) {
   });
 }
 
+// Sound checkbox
+function toggleSound() {
+    console.log("test");
+    !soundNotification;
+}
+
+// Redirects to offscreen.html, service workers don't have access to DOM APIs
+async function playSound(source = 'bong.mp3', volume = 1) {
+    await createOffscreen();
+    await chrome.runtime.sendMessage({ play: { source, volume } });
+}
+
+// Document closes after 30 seconds without audio playing due to chrome's 'lifetime limit'
+async function createOffscreen() {
+    if (await chrome.offscreen.hasDocument()) return;
+    await chrome.offscreen.createDocument({
+        url: 'offscreen.html',
+        reasons: ['AUDIO_PLAYBACK'],
+        justification: 'play timer notification' //
+    });
+}
 
