@@ -13,6 +13,16 @@ document.getElementById("resetTimerButton").addEventListener('click', function()
     chrome.runtime.sendMessage({command: 'reset'});
 });
 
+//Link 'Break Time!' button to html element
+document.getElementById('breakTimerButton').addEventListener('click', function () {
+    chrome.runtime.sendMessage({command: 'break'});
+});
+
+//Link 'Sound' checkbox to html element
+document.getElementById('soundCheckbox').addEventListener('click', function () {
+    chrome.runtime.sendMessage({command: 'sound'});
+});
+
 // Updates timer - formats remaining time to be displayed 
 function updateDisplay() {
     chrome.runtime.sendMessage({ command: 'getRemainingTime' }, function(response) {
@@ -31,9 +41,8 @@ function padZero(num){
 
 setInterval(updateDisplay, 1000);
 
-// Opens tab to extenion's page
+// Opens tab to extension's page
 document.getElementById("openMain").addEventListener('click', function() {
-    console.log("test");
     chrome.tabs.create({
         url: "main.html"
       });
