@@ -15,6 +15,9 @@ let soundNotification = true;
 // Flag for timer running and paused
 let isTimerRunning = false;
 
+// Required to communicate checked sound box between main & extension
+chrome.storage.sync.set({'soundNotification': soundNotification});
+
 // Handles messages, invokes function based on message. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.command === 'start' && !isTimerRunning) {
@@ -33,8 +36,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   // Sends remaining time to popup.js
   else if (request.command === 'getRemainingTime') {
       sendResponse({ remainingTime: remainingTime });
-  } else if (request.command === 'sound') {
-     toggleSound();
   } 
   // Add a catch-all response for unhandled commands
   else {
@@ -42,6 +43,28 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
   return true; // Keep the message channel open for async response
 });
+
+// Updates soundNotification storage 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.command === 'updateStorage' && request.data === 'toggleSoundNotification') {
+
+        // Update the storage with sound data
+        chrome.storage.sync.get('soundNotification', function(data) {
+            let newSoundSetting = !data.soundNotification;
+
+            // Manual update required  because playSound is asynchronous
+            soundNotification = newSoundSetting;
+            
+            chrome.storage.sync.set({ 'soundNotification': newSoundSetting });
+
+            // ??? Get understanding of why this shows the opposite of the status of the Sound checkbox - probably due to async nature. Still,works perfectly and pages communicate appropriately 
+            console.log('Current soundNotification value in chrome.,storage.sync.get:', data.soundNotification);
+            
+        });
+    
+    }
+});
+
 
 // Starts timer countdown
 function startTimer() {
@@ -54,9 +77,9 @@ function startTimer() {
                 clearInterval(timerInterval);
                 isTimerRunning = false;
                 showNotification('Work time is up!');
-                if (soundNotification) {
-                    playSound();
-                }
+        
+                playSound();
+                
                 remainingTime = defaultTime; // Reset to default or a defined work/break period
             }
         }, 1000);
@@ -105,16 +128,13 @@ function showNotification(message) {
   });
 }
 
-// Sound checkbox
-function toggleSound() {
-    console.log("test");
-    !soundNotification;
-}
-
 // Redirects to offscreen.html, service workers don't have access to DOM APIs
 async function playSound(source = 'bong.mp3', volume = 1) {
-    await createOffscreen();
-    await chrome.runtime.sendMessage({ play: { source, volume } });
+    console.log("at time played, soundNotification in background.js= " + soundNotification)
+    if (soundNotification) {
+        await createOffscreen();
+        await chrome.runtime.sendMessage({ play: { source, volume } });
+    }
 }
 
 // Document closes after 30 seconds without audio playing due to chrome's 'lifetime limit'
