@@ -26,11 +26,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   else if (request.command === 'getRemainingTime') {
       sendResponse({ remainingTime: remainingTime });
   }
-  // Sends test notification
-  else if (request.command === 'testNotification') {
-      showNotification('Test notification');
-      sendResponse({ status: "Test notification sent" });
-  }
   // Add a catch-all response for unhandled commands
   else {
       sendResponse({ status: "Command not recognized" });

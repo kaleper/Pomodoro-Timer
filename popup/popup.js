@@ -38,8 +38,3 @@ document.getElementById("openMain").addEventListener('click', function() {
         url: "main.html"
       });
 })
-
-// Adding event listener for Test Notification button
-document.getElementById("testNotificationButton").addEventListener('click', function() {
-    chrome.runtime.sendMessage({command: 'testNotification'});
-});
