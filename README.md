@@ -2,20 +2,19 @@
 A chrome extension based on the Pomodoro Technique, a time-management method with time specified intervals of work with breaks inbetween.
 
 #### Bugs:
-> - 'Alarm' checkbox does not allow a sound notification to be played when checked
+> - ~1s timer delay on button actions
 
 #### TODO:
 
  > **Priority:**
- > (1) Implement an alert message to inform client when timer is finished
- > (2) Implement breaks and alert messages 
- > (3) main.html GUI
- > (4) Remove redundant code
+ > (1) Custom breaks/ work durations via settings on main page or some other method
+ > (1) main.html GUI - currently copied from popup.js. Will be modified to be made more unique
 
 
 #### If Time Permits:
 
 > **Priority:**
+> (1) Custom music playing
 > (1) Stretch recommendations
 > (2) Website redirecting  
 > (3) Statistics enabling 
