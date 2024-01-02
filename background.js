@@ -3,8 +3,7 @@
 // Tracks remaining timer time 
 let remainingTime = 5
 
-let defaultTime = 5;
-
+let workTime = 5;
 let breakTime = 7;
 
 // Time in milliseconds to decrement timer by
@@ -15,11 +14,22 @@ let soundNotification = true;
 // Flag for timer running and paused
 let isTimerRunning = false;
 
+// Flag for current state
+let isWorkPeriod = true;
+
 // Required to communicate checked sound box between main & extension
 chrome.storage.sync.set({'soundNotification': soundNotification});
 
 // Handles messages, invokes function based on message. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if(request.command === 'updateTimes' && request.workTime && request.breakTime) {
+    // Update work and break times, converting minutes to milliseconds
+    workTime = parseInt(request.workTime) * 60;
+    breakTime = parseInt(request.breakTime) * 60;
+    console.log(`Updated times: Work - ${workTime/60000} mins, Break - ${breakTime/60000} mins`);
+    resetTimer();
+  }
+  
   if (request.command === 'start' && !isTimerRunning) {
       startTimer();
       sendResponse({ status: "Timer started" });
@@ -31,6 +41,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sendResponse({ status: "Timer reset" });
   } else if (request.command === 'break') {
       breakTimer();
+      isWorkPeriod = false;
       sendResponse({ status: "Break timer started" });
   }
   // Sends remaining time to popup.js
@@ -70,7 +81,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function startTimer() {
     if (!isTimerRunning) {
         isTimerRunning = true;
-        remainingTime = remainingTime || defaultTime; // or your default time
+        isWorkPeriod = true;
+        remainingTime = remainingTime || workTime; // or your default time
         timerInterval = setInterval(() => {
             remainingTime--;
             if (remainingTime <= 0) {
@@ -80,7 +92,7 @@ function startTimer() {
         
                 playSound();
                 
-                remainingTime = defaultTime; // Reset to default or a defined work/break period
+                remainingTime = workTime; // Reset to default or a defined work/break period
             }
         }, 1000);
     }
@@ -90,7 +102,8 @@ function startTimer() {
 function breakTimer() {
     if (!isTimerRunning) {
         isTimerRunning = true;
-        remainingTime = breakTime || defaultTime;
+        isWorkPeriod = false;
+        remainingTime = breakTime || workTime;
         timerInterval = setInterval(() => {
             remainingTime--;
             if (remainingTime <= 0) {
@@ -100,7 +113,7 @@ function breakTimer() {
                 if (soundNotification) {
                     playSound();
                 }
-                remainingTime = defaultTime; // Reset to default or a defined work/break period
+                remainingTime = workTime; // Reset to default or a defined work/break period
             }
         }, 1000);
     }
@@ -108,9 +121,14 @@ function breakTimer() {
 
 // Stops and clears the remaining time
 function resetTimer() {
-  clearInterval(timerInterval);
-  remainingTime = defaultTime; // Reset to default time
-  
+  if (isWorkPeriod) {
+    clearInterval(timerInterval);
+    remainingTime = workTime; // Reset to default time
+  }
+  else {
+    clearInterval(timerInterval);
+    remainingTime = breakTime; // Reset to default time
+  }
 }
 
 // Pauses timer 
