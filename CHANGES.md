@@ -23,4 +23,10 @@ version 1.0.3 (01-01-2023)
     - Sound setting saved here and is synced between main.js, popup.js and background.js
     - popup.js & main.js listen for changes
 
+version 1.0.4 (01-01-2023)
+==========================
+* Added in animated clock
+    - Introduced a new variable in background.js (totalTime) to keep track of total time.
+
+
 
