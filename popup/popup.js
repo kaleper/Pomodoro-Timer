@@ -68,6 +68,6 @@ function updatePopup() {
 // Opens tab to extension's page
 document.getElementById("openMain").addEventListener('click', function () {
     chrome.tabs.create({
-        url: "main.html"
+        url: "main/main.html"
     });
 })

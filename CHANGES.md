@@ -27,6 +27,7 @@ version 1.0.4 (01-01-2023)
 ==========================
 * Added in animated clock
     - Introduced a new variable in background.js (totalTime) to keep track of total time.
+* Cleaned up file structure.
 
 
 

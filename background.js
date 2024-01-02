@@ -131,7 +131,7 @@ function showNotification(message) {
 }
 
 // Redirects to offscreen.html, service workers don't have access to DOM APIs
-async function playSound(source = 'bong.mp3', volume = 1) {
+async function playSound(source = 'audio/bong.mp3', volume = 1) {
     console.log("at time played, soundNotification in background.js= " + soundNotification)
     if (soundNotification) {
         await createOffscreen();
