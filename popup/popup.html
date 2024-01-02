@@ -4,23 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <link rel="stylesheet" href="popup.css">
+
+    
+
+    <!-- Font Awesome Icon, Checkbox-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Font Poppins-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+
     <title>Pomodoro Timer</title>
 </head>
 <body>
     <h1>Pomodoro Timer</h1>
-    <h1 id="time">00:00</h1>
+    <h1 id="timerDisplay">00:00</h1>
     <div>
-        <button type="button" id="startTimerButton">Go</button>
-        <button type="button" id="pauseTimerButton">pause</button>
-        <button type="button" id="stopTimerButton">End</button>
-        <label>
-            <input type="checkbox" id="soundNotification">
-        </label>
-        <!-- music player  -->
+        <div id="controlsContainer">
+            <button type="button" id="startTimerButton">Start</button>
+            <button type="button" id="pauseTimerButton">Pause</button>
+            <button type="button" id="resetTimerButton">Reset</button>
+        </div>    
+        <!-- Youtube Music Player  -->
         <div container = "musicContainer">
-          <iframe id="musicPlayer" width="400" height="315" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
+          <iframe id="musicPlayer" width="300" height="185" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
         </div>
-        <button type = "button" id ="openMain">Open New Tab</button>
+        <!-- 'Extension Page' button & 'Alarm checkbox' -->
+        <div id = "bottomButtonContainer">
+            <button type = "button" id="openMain">Extension</button>
+            <button type = "button" id="breakTimerButton">Break!</button>
+            <div class="checkboxContainer">
+                <input type="checkbox" id="soundCheckbox" > 
+                <label for = "soundCheckbox"> Sound
+                </label>
+            </div>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>

@@ -39,10 +39,16 @@ button:hover {
     background-color: rgb(58, 77, 57);
 }
 
+div[container="musicContainer"] {
+    display:flex;
+    justify-content: center;
+}
+
 /* 'Extension Page' button and 'Alarm' checkbox */
 #bottomButtonContainer {
     display:flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap:5px;
     margin-top:10px;
     margin-bottom:10px;
 }
