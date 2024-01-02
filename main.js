@@ -18,14 +18,14 @@ document.getElementById('breakTimerButton').addEventListener('click', function (
     chrome.runtime.sendMessage({command: 'break'});
 });
 
-//Link 'Sound' checkbox to html element
+//Link 'Sound' checkbox to html element, sends message to update storage 
 document.getElementById('soundCheckbox').addEventListener('click', function () {
-    console.log("Sent message from popup.js: before");
     chrome.runtime.sendMessage({command: 'updateStorage', data: 'toggleSoundNotification'});
-    console.log("Sent message from popup.js: after");
+
 });
 
-document.addEventListener('DOMContentLoaded', updatePopup);
+// Listen for changes in storage (sound notification)
+chrome.storage.onChanged.addListener(handleStorageChanges);
 
 // Updates timer - formats remaining time to be displayed 
 function updateDisplay() {
@@ -38,24 +38,21 @@ function updateDisplay() {
     });
 }
 
+// Function to handle changes in storage
+function handleStorageChanges(changes, area) {
+    if (changes.hasOwnProperty('soundNotification')) {
+
+        // Updates checked option
+        document.getElementById("soundCheckbox").checked = changes.soundNotification.newValue;
+
+
+    }
+}
+
+
 // Pads with zero when timer <10 minutes
 function padZero(num){
     return num < 10 ?`0${num}` : num;
 }
 
 setInterval(updateDisplay, 1000);
-
-// Updates the sound checkbox if user toggles in main
-function updatePopup(){
-    chrome.storage.sync.get(['soundNotification'], function(data) {                                           
-        document.getElementById("soundCheckbox").checked = data.soundNotification;
-    });
-  }
-
-
-// Opens tab to extension's page
-document.getElementById("openMain").addEventListener('click', function() {
-    chrome.tabs.create({
-        url: "main.html"
-      });
-})

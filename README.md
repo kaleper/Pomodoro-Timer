@@ -7,9 +7,8 @@ A chrome extension based on the Pomodoro Technique, a time-management method wit
 #### TODO:
 
  > **Priority:**
- > (1) Implement breaks and alert messages
- > (2) Settings window from main page to set custom break / work durations? 
- > (2) main.html GUI
+ > (1) Custom breaks/ work durations via settings on main page or some other method
+ > (1) main.html GUI - currently copied from popup.js. Will be modified to be made more unique
 
 
 #### If Time Permits:
