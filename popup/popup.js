@@ -32,19 +32,14 @@ function updateDisplay() {
     chrome.runtime.sendMessage({ command: 'getRemainingTime' }, function (response) {
         console.log(response.remainingTime);
         if (response && response.remainingTime) {
-            // TODO: fix time when it goes over 60 seconds
-            //----------------------------------------------------------------------
-            // Old Timer Logic - might still need to use to display time correctly
-            // const minutes = Math.floor(response.remainingTime / 60);
-            // const seconds = response.remainingTime % 60;
-            // document.getElementById('timerDisplay').textContent = `${padZero(minutes)}:${padZero(seconds)}`;
-            //----------------------------------------------------------------------
             const timerCircle = document.querySelector('.timer').querySelector('svg > circle + circle');
             document.querySelector('.timer').classList.add('animatable');
             timerCircle.style.strokeDashoffset = 1;
             const normalizedTime = (response.totalTime - response.remainingTime) / response.totalTime;
             timerCircle.style.strokeDashoffset = normalizedTime;
-            document.getElementById('timeLeft').innerHTML = response.remainingTime;
+            const minutes = Math.floor(response.remainingTime / 60);
+            const seconds = response.remainingTime % 60;
+            document.getElementById('timeLeft').innerHTML = `${padZero(minutes)}:${padZero(seconds)}`;
         }
     });
 
