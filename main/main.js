@@ -31,9 +31,14 @@ chrome.storage.onChanged.addListener(handleStorageChanges);
 function updateDisplay() {
     chrome.runtime.sendMessage({ command: 'getRemainingTime' }, function(response) {
         if (response && response.remainingTime) {
+            const timerCircle = document.querySelector('.timer').querySelector('svg > circle + circle');
+            document.querySelector('.timer').classList.add('animatable');
+            timerCircle.style.strokeDashoffset = 1;
+            const normalizedTime = (response.totalTime - response.remainingTime) / response.totalTime;
+            timerCircle.style.strokeDashoffset = normalizedTime;
             const minutes = Math.floor(response.remainingTime / 60);
             const seconds = response.remainingTime % 60;
-            document.getElementById('timerDisplay').textContent = `${padZero(minutes)}:${padZero(seconds)}`;
+            document.getElementById('timeLeft').innerHTML = `${padZero(minutes)}:${padZero(seconds)}`;
         }
     });
 }

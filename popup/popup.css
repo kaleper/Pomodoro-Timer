@@ -13,6 +13,14 @@ background-color: rgb(236, 227, 206);
 h1{
     text-align: center;
     color: rgb(58, 77, 57);
+    margin-bottom: 0px;
+}
+#timerContainer{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   
 }
 
 /* 'Start', 'Pause' and 'Reset' buttons */
@@ -116,4 +124,42 @@ input[type="checkbox"]:checked {
 /* Allows 'Alarm' checkbox to be displayed */
 input[type="checkbox"]:checked:after {
     display:block;
+}
+
+/* CSS for animated clock */
+.timer {
+    margin-top: 10px;
+}
+  
+.timer > svg {
+    width: 200px;
+    height: 200px;
+}
+
+.timer > svg > circle {
+    fill: none;
+    stroke-opacity: 0.3;
+    stroke: rgb(79, 111, 82);
+    stroke-width: 10;
+    transform-origin: center center;
+    transform: rotate(-90deg);
+}
+
+.timer > svg > circle + circle {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    stroke-linecap: round;
+    stroke-opacity: 1;
+}
+
+.timer.animatable > svg > circle + circle {
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.timer > svg > text {
+    font-size: 2rem;
+}
+
+.timer > svg > text + text {
+    font-size: 1rem;
 }
