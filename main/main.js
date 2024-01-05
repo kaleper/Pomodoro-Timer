@@ -49,11 +49,8 @@ function handleStorageChanges(changes, area) {
 
         // Updates checked option
         document.getElementById("soundCheckbox").checked = changes.soundNotification.newValue;
-
-
     }
 }
-
 
 // Pads with zero when timer <10 minutes
 function padZero(num){
