@@ -1,3 +1,7 @@
+
+
+21312
+
 # Pomodoro Chrome Extension - Version 1.0
 A chrome extension based on the Pomodoro Technique, a time-management method with time specified intervals of work with breaks inbetween.
 

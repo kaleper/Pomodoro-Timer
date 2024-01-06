@@ -1,7 +1,10 @@
 // background.js runs in chrome background. popup.js sends messages. popup.js sends messages to background.js to communicate.
 
-// Tracks remaining timer time 
-let remainingTime = 5
+// Tracks total time of the timer
+let totalTime = 10;
+
+// Tracks remaining time on timer
+let remainingTime = 10;
 
 let workTime = 5;
 let breakTime = 7;
@@ -46,7 +49,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
   // Sends remaining time to popup.js
   else if (request.command === 'getRemainingTime') {
-      sendResponse({ remainingTime: remainingTime });
+      sendResponse({ remainingTime: remainingTime, totalTime: totalTime });
   } 
   // Add a catch-all response for unhandled commands
   else {
@@ -91,8 +94,8 @@ function startTimer() {
                 showNotification('Work time is up!');
         
                 playSound();
-                
-                remainingTime = workTime; // Reset to default or a defined work/break period
+               
+                setDefault(); // Reset to default or a defined work/break period
             }
         }, 1000);
     }
@@ -113,7 +116,7 @@ function breakTimer() {
                 if (soundNotification) {
                     playSound();
                 }
-                remainingTime = workTime; // Reset to default or a defined work/break period
+                setDefault(); // Reset to default or a defined work/break period
             }
         }, 1000);
     }
@@ -147,7 +150,7 @@ function showNotification(message) {
 }
 
 // Redirects to offscreen.html, service workers don't have access to DOM APIs
-async function playSound(source = 'bong.mp3', volume = 1) {
+async function playSound(source = 'audio/bong.mp3', volume = 1) {
     console.log("at time played, soundNotification in background.js= " + soundNotification)
     if (soundNotification) {
         await createOffscreen();
@@ -163,5 +166,10 @@ async function createOffscreen() {
         reasons: ['AUDIO_PLAYBACK'],
         justification: 'play timer notification' //
     });
+}
+
+function setDefault(){
+    remainingTime = defaultTime; // Reset to default time
+    totalTime = defaultTime; // Reset Total time to default time
 }
 
