@@ -2,21 +2,42 @@
 * {
     box-sizing: border-box;
     font-family: 'Poppins', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* Popup backgorund */
 body {
-background-color: rgb(236, 227, 206);
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
+    height: 100vh;
 }
+
+/* Translucent Background */
+body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.65;
+    background-image: url("../images/background.avif");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.pageContainer {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 
 /* 'Pomodoro Timer' header */
 h1{
-    text-align: center;
-    color: rgb(58, 77, 57);
+    font-weight:bold;
+    font-size:2rem;
+    color: rgb(36, 48, 36);
 }
 
 /* 'Start', 'Pause' and 'Reset' buttons */
@@ -32,15 +53,15 @@ button {
     border:none;
     border-radius: 5px;
     color: rgb(236, 227, 206);
-    background-color: rgb(115, 144, 114);
-    box-shadow: 2px 2px 7px 1px rgba(115,144,114,0.46);
+    background-color: rgb(60, 86, 60);
+    box-shadow: 2px 2px 7px 1px rgba(36, 45, 35, 0.46);
     transition: 0.5s;
     padding: 3px;
     cursor :pointer;
-
 }
+
 button:hover {
-    background-color: rgb(58, 77, 57);
+    background-color: rgb(0, 0, 0);
 }
 
 div[container="musicContainer"] {
@@ -60,15 +81,15 @@ div[container="musicContainer"] {
 /* 'Alarm' Text */
 #alarm {
     font-weight: 500;
-    color: rgb(58, 77, 57);
+    color: rgb(60, 86, 60);
 }
 
 .checkboxContainer {
-   
     display:flex;
     align-items: center;
     justify-content:space-around;
     margin-right:10px;
+    color: rgb(236, 227, 206);
    
 }
 
@@ -120,7 +141,7 @@ input[type="checkbox"]:hover {
 
 /* Darkens checked 'Alarm' box */
 input[type="checkbox"]:checked {
-    background-color:rgb(79, 111, 82);
+    background-color:rgb(60, 86, 60);
 }
 
 /* Allows 'Alarm' checkbox to be displayed */

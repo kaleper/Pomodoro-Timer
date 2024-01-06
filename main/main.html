@@ -6,8 +6,6 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     <link rel="stylesheet" href="./main.css">
 
-    
-
     <!-- Font Awesome Icon, Checkbox-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -17,40 +15,41 @@
     <title>Pomodoro Timer</title>
 </head>
 <body>
-    <h1>Pomodoro Timer</h1>
-    <div id="timerContainer">
-        <!-- Old Timer -->
-        <!-- <h1 id="timerDisplay">00:00</h1> -->
-        <!-- Circle Timer -->
-        <div class="timer animatable">
-            <svg>
-              <circle cx="50%" cy="50%" r="90"/>
-              <circle cx="50%" cy="50%" r="90" pathLength="1" />
-              <text x="100" y="100" text-anchor="middle"><tspan id="timeLeft"></tspan></text>
-              <text x="100" y="120" text-anchor="middle">Time</text>
-            </svg>
-          </div>
-    </div>
-    <div>
-        <div id="controlsContainer">
-            <button type="button" id="startTimerButton">Start</button>
-            <button type="button" id="pauseTimerButton">Pause</button>
-            <button type="button" id="resetTimerButton">Reset</button>
-        </div>    
-        <!-- Youtube Music Player  -->
-        <div container = "musicContainer">
-          <iframe id="musicPlayer" width="300" height="185" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
+    <div class="pageContainer">
+        <h1>Pomodoro Timer</h1>
+        <div id="timerContainer">
+            <!-- Circle Timer -->
+            <div class="timer animatable">
+                <svg>
+                <circle cx="50%" cy="50%" r="90"/>
+                <circle cx="50%" cy="50%" r="90" pathLength="1" />
+                <text x="100" y="100" text-anchor="middle"><tspan id="timeLeft"></tspan></text>
+                <text x="100" y="120" text-anchor="middle">Time</text>
+                </svg>
+            </div>
         </div>
-        <!-- 'Extension Page' button & 'Alarm checkbox' -->
-        <div id = "bottomButtonContainer">
-            <button type = "button" id="breakTimerButton">Break!</button>
-            <div class="checkboxContainer">
-                <input type="checkbox" id="soundCheckbox" checked> 
-                <label for = "soundCheckbox"> Sound
-                </label>
+        <div>
+            <div id="controlsContainer">
+                <button type="button" id="startTimerButton">Start</button>
+                <button type="button" id="pauseTimerButton">Pause</button>
+                <button type="button" id="resetTimerButton">Reset</button>
+            </div>    
+            <!-- Youtube Music Player  -->
+            <div container = "musicContainer">
+            <iframe id="musicPlayer" width="300" height="185" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen ></iframe>
+            </div>
+            <!-- 'Extension Page' button & 'Alarm checkbox' -->
+            <div id = "bottomButtonContainer">
+                <button type = "button" id="breakTimerButton">Break!</button>
+                <div class="checkboxContainer">
+                    <input type="checkbox" id="soundCheckbox" checked> 
+                    <label for = "soundCheckbox"> Sound
+                    </label>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="./main.js"></script>
 </body>
 </html>

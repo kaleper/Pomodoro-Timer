@@ -1,11 +1,14 @@
 {
     "manifest_version": 3,
     "name": "Pomodoro Timer",
-    "description": "Base Level Extension",
-    "version": "1.0.4",
+    "description": "Enhance productivity with intentional work and break periods.",
+    "version": "1.0.5",
     "action": {
       "default_popup": "./popup/popup.html",
       "default_icon": "./images/light-bulb.png"
+    },
+    "icons": {
+       "128": "./images/light-bulb.png"
     },
     "permissions": [
       "tabs",
