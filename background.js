@@ -1,13 +1,13 @@
 // background.js runs in chrome background. popup.js sends messages. popup.js sends messages to background.js to communicate.
 
 // Tracks total time of the timer
-let totalTime = 10;
+let totalTime = 1500;
 
 // Tracks remaining time on timer
-let remainingTime = 10;
+let remainingTime = 1500;
 
-let workTime = 5;
-let breakTime = 7;
+let workTime = 1500;
+let breakTime = 300;
 
 // Time in milliseconds to decrement timer by
 let timerInterval;
@@ -19,6 +19,7 @@ let isTimerRunning = false;
 
 // Flag for current state
 let isWorkPeriod = true;
+let isBreakPeriod = false;
 
 // Required to communicate checked sound box between main & extension
 chrome.storage.sync.set({'soundNotification': soundNotification});
@@ -43,13 +44,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       resetTimer();
       sendResponse({ status: "Timer reset" });
   } else if (request.command === 'break') {
+      pauseTimer();
       breakTimer();
       isWorkPeriod = false;
       sendResponse({ status: "Break timer started" });
   }
   // Sends remaining time to popup.js
   else if (request.command === 'getRemainingTime') {
-      sendResponse({ remainingTime: remainingTime, totalTime: totalTime });
+      if (isWorkPeriod){
+        sendResponse({ remainingTime: remainingTime, totalTime: workTime });
+      }
+      else{
+        sendResponse({ remainingTime: remainingTime, totalTime: breakTime });
+      }
+      
   } 
   // Add a catch-all response for unhandled commands
   else {
@@ -84,8 +92,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function startTimer() {
     if (!isTimerRunning) {
         isTimerRunning = true;
-        isWorkPeriod = true;
+        if (!isBreakPeriod){
+            isWorkPeriod = true;
+            totalTime = workTime;
+        }
+        else{
+            totalTime = breakTime;
+        }
+        //totalTime = breakTime || workTime;
         remainingTime = remainingTime || workTime; // or your default time
+        console.log("starting time:" + remainingTime + " | totalTime: "+ totalTime );
         timerInterval = setInterval(() => {
             remainingTime--;
             if (remainingTime <= 0) {
@@ -103,9 +119,12 @@ function startTimer() {
 
 // Considered combining this with startTimer() but thought function would become too complicated once different durations were passed in as args
 function breakTimer() {
+    clearInterval(timerInterval)
     if (!isTimerRunning) {
         isTimerRunning = true;
         isWorkPeriod = false;
+        isBreakPeriod = true;
+        totalTime = breakTime || workTime;
         remainingTime = breakTime || workTime;
         timerInterval = setInterval(() => {
             remainingTime--;
@@ -124,14 +143,19 @@ function breakTimer() {
 
 // Stops and clears the remaining time
 function resetTimer() {
-  if (isWorkPeriod) {
-    clearInterval(timerInterval);
-    remainingTime = workTime; // Reset to default time
-  }
-  else {
-    clearInterval(timerInterval);
-    remainingTime = breakTime; // Reset to default time
-  }
+    //   if (isWorkPeriod) {
+    //     clearInterval(timerInterval);
+    //     setDefaultDefined(workTime); // Reset to default time
+    //   }
+    //   else {
+    //     clearInterval(timerInterval);
+    //     setDefaultDefined(breakTime); // Reset to default time
+    //   }
+    // Instead of resetting break time + worktime just reset back to default worktime
+    clearInterval(timerInterval)
+    setDefaultDefined(workTime)
+    isWorkPeriod =true;
+    isBreakPeriod = false;
 }
 
 // Pauses timer 
@@ -169,7 +193,13 @@ async function createOffscreen() {
 }
 
 function setDefault(){
-    remainingTime = defaultTime; // Reset to default time
-    totalTime = defaultTime; // Reset Total time to default time
+    remainingTime = workTime; // Reset to default time
+    totalTime = workTime; // Reset Total time to default time
+}
+
+function setDefaultDefined(definedTime){
+    remainingTime = definedTime; // Reset to default time
+    totalTime = definedTime; // Reset Total time to default time
+    isTimerRunning = false;
 }
 
