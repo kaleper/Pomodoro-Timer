@@ -50,7 +50,8 @@ button:hover {
 /* 'Extension Page' button and 'Alarm' checkbox */
 #bottomButtonContainer {
     display:flex;
-    justify-content: space-between;
+    justify-content:flex-end;
+    gap: 5px;
     margin-top:10px;
     margin-bottom:10px;
 }

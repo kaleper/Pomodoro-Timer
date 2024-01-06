@@ -59,5 +59,14 @@ function padZero(num){
 
 setInterval(updateDisplay, 1000);
 
-//TODO:
-// Move the work time + break time logic into this file instead of popup
+
+// Save settings button event listener
+document.getElementById('save-settings').addEventListener('click', function() {
+    let workTime = document.getElementById('work-time').value; // Get user-set work time
+    let breakTime = document.getElementById('break-time').value; // Get user-set break time
+
+    // Send a message to the background script with the new times
+    chrome.runtime.sendMessage({command: 'updateTimes', workTime: workTime, breakTime: breakTime});
+    updateDisplay();
+});
+

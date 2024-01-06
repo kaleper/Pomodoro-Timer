@@ -149,6 +149,35 @@ input[type="checkbox"]:checked:after {
     display:block;
 }
 
+
+label[for="work-time"], label[for="break-time"] {
+    color: rgb(236, 227, 206);
+    background-color: rgb(60, 86, 60);
+    
+}
+
+#work-time-container, #break-time-container {
+    background-color: rgb(60, 86, 60);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+
+}
+
+#work-time, #break-time {
+color: rgb(236, 227, 206);
+background-color: rgb(60, 86, 60);
+border: none;
+border-radius: 5px;
+
+}
+
+#timer-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
 /* CSS for animated clock */
 .timer {
     margin-top: 10px;
