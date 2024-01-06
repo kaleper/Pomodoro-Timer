@@ -1,8 +1,7 @@
-# Pomodoro Chrome Extension - Version 1.0.5
+# Pomodoro Chrome Extension - Version 1.0.7
 A chrome extension based on the Pomodoro Technique, a time-management method with time specified intervals of work with breaks in-between.
 
 #### Bugs:
-> - ~1s timer delay on button actions
 
 #### TODO:
 

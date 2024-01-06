@@ -38,3 +38,9 @@ Version 1.0.5 (01-05-2023)
 Version 1.0.6 (01-05-2023)
 ==========================
 * Bug fixes with using work time + break times with the UI clock animation.
+
+Version 1.0.7 (01-06-2023)
+==========================
+* Move custom work and break times from popup.js to main.js.
+* Style custom work and break fields
+* Remove redundant code, clean up files.

@@ -1,17 +1,19 @@
-// background.js runs in chrome background. popup.js sends messages. popup.js sends messages to background.js to communicate.
+// background.js runs in chrome background, sent messages from popup.js and main.js. 
 
-// Tracks total time of the timer
+// Tracks total time of the timer. Used in timer animation
 let totalTime = 1500;
 
 // Tracks remaining time on timer
 let remainingTime = 1500;
 
+// Default work and break times 
 let workTime = 1500;
 let breakTime = 300;
 
 // Time in milliseconds to decrement timer by
 let timerInterval;
 
+// Play notification when timer is up 
 let soundNotification = true;
 
 // Flag for timer running and paused
@@ -24,16 +26,19 @@ let isBreakPeriod = false;
 // Required to communicate checked sound box between main & extension
 chrome.storage.sync.set({'soundNotification': soundNotification});
 
-// Handles messages, invokes function based on message. Checks whether 'start' and 'pause' flags are set to prevent unexpected results.
+// Handles messages, invokes function based on message. Checks whether 'start', 'pause', 'work' or 'break' flags are set to prevent unexpected results.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+
+    // User entered custom work/ break times
   if(request.command === 'updateTimes' && request.workTime && request.breakTime) {
-    // Update work and break times, converting minutes to milliseconds
+
     workTime = parseInt(request.workTime) * 60;
     breakTime = parseInt(request.breakTime) * 60;
     console.log(`Updated times: Work - ${workTime/60000} mins, Break - ${breakTime/60000} mins`);
     resetTimer();
   }
   
+  //  User clicked action button 
   if (request.command === 'start' && !isTimerRunning) {
       startTimer();
       sendResponse({ status: "Timer started" });
@@ -54,16 +59,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       if (isWorkPeriod){
         sendResponse({ remainingTime: remainingTime, totalTime: workTime });
       }
-      else{
+      else {
         sendResponse({ remainingTime: remainingTime, totalTime: breakTime });
       }
-      
   } 
+
   // Add a catch-all response for unhandled commands
   else {
       sendResponse({ status: "Command not recognized" });
   }
-  return true; // Keep the message channel open for async response
+
 });
 
 // Updates soundNotification storage 
@@ -72,36 +77,35 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         // Update the storage with sound data
         chrome.storage.sync.get('soundNotification', function(data) {
+
             let newSoundSetting = !data.soundNotification;
 
             // Manual update required  because playSound is asynchronous
             soundNotification = newSoundSetting;
             
+            // Update storage with setting
             chrome.storage.sync.set({ 'soundNotification': newSoundSetting });
-
-            // ??? Get understanding of why this shows the opposite of the status of the Sound checkbox - probably due to async nature. Still,works perfectly and pages communicate appropriately 
-            console.log('Current soundNotification value in chrome.,storage.sync.get:', data.soundNotification);
             
         });
     
     }
 });
 
-
 // Starts timer countdown
 function startTimer() {
+    // Update flag if not running
     if (!isTimerRunning) {
         isTimerRunning = true;
+        // Start work period
         if (!isBreakPeriod){
             isWorkPeriod = true;
             totalTime = workTime;
         }
-        else{
+        // Start break period 
+        else {
             totalTime = breakTime;
         }
-        //totalTime = breakTime || workTime;
-        remainingTime = remainingTime || workTime; // or your default time
-        console.log("starting time:" + remainingTime + " | totalTime: "+ totalTime );
+
         timerInterval = setInterval(() => {
             remainingTime--;
             if (remainingTime <= 0) {
@@ -111,21 +115,23 @@ function startTimer() {
         
                 playSound();
                
-                setDefault(); // Reset to default or a defined work/break period
+                // Reset to default work time
+                setDefault(); 
             }
         }, 1000);
     }
 }
 
-// Considered combining this with startTimer() but thought function would become too complicated once different durations were passed in as args
 function breakTimer() {
     clearInterval(timerInterval)
     if (!isTimerRunning) {
         isTimerRunning = true;
         isWorkPeriod = false;
         isBreakPeriod = true;
-        totalTime = breakTime || workTime;
-        remainingTime = breakTime || workTime;
+        remainingTime = breakTime 
+
+        totalTime = breakTime 
+
         timerInterval = setInterval(() => {
             remainingTime--;
             if (remainingTime <= 0) {
@@ -135,26 +141,19 @@ function breakTimer() {
                 if (soundNotification) {
                     playSound();
                 }
-                setDefault(); // Reset to default or a defined work/break period
+                // Reset to default work time
+                setDefault(); 
             }
         }, 1000);
     }
 }
 
-// Stops and clears the remaining time
+// Resets time and flags 
 function resetTimer() {
-    //   if (isWorkPeriod) {
-    //     clearInterval(timerInterval);
-    //     setDefaultDefined(workTime); // Reset to default time
-    //   }
-    //   else {
-    //     clearInterval(timerInterval);
-    //     setDefaultDefined(breakTime); // Reset to default time
-    //   }
-    // Instead of resetting break time + worktime just reset back to default worktime
+    
     clearInterval(timerInterval)
     setDefaultDefined(workTime)
-    isWorkPeriod =true;
+    isWorkPeriod = true;
     isBreakPeriod = false;
 }
 
@@ -164,6 +163,7 @@ function pauseTimer() {
     isTimerRunning = false;
   }
 
+// Display visual notification when timer is up
 function showNotification(message) {
   chrome.notifications.create('', {
       title: 'Pomodoro Timer',
@@ -188,18 +188,22 @@ async function createOffscreen() {
     await chrome.offscreen.createDocument({
         url: 'offscreen.html',
         reasons: ['AUDIO_PLAYBACK'],
-        justification: 'play timer notification' //
+        justification: 'play timer notification' 
     });
 }
 
+// Reset timer to default settings 
 function setDefault(){
-    remainingTime = workTime; // Reset to default time
-    totalTime = workTime; // Reset Total time to default time
+
+    remainingTime = workTime; 
+    totalTime = workTime; 
 }
 
+// Sets timer to custom user settings 
 function setDefaultDefined(definedTime){
-    remainingTime = definedTime; // Reset to default time
-    totalTime = definedTime; // Reset Total time to default time
+
+    remainingTime = definedTime; 
+    totalTime = definedTime;
+
     isTimerRunning = false;
 }
-

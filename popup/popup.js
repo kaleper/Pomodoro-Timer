@@ -66,17 +66,29 @@ document.getElementById("openMain").addEventListener('click', function () {
       });
 })
 
+
+// Move to main 
+
+/*
+
 // Save settings button event listener
 document.getElementById('save-settings').addEventListener('click', function() {
     var workTime = document.getElementById('work-time').value; // Get user-set work time
     var breakTime = document.getElementById('break-time').value; // Get user-set break time
 
+
+    // Not being used? 
+    
     // Save the times using Chrome's storage API
     chrome.storage.sync.set({workTime: workTime, breakTime: breakTime}, function() {
         console.log('Times are set to ' + workTime + ' minutes for work and ' + breakTime + ' minutes for break.');
     });
 
+
+
     // Send a message to the background script with the new times
     chrome.runtime.sendMessage({command: 'updateTimes', workTime: workTime, breakTime: breakTime});
     updateDisplay();
 });
+
+*/
