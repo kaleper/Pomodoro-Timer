@@ -58,3 +58,6 @@ function padZero(num){
 }
 
 setInterval(updateDisplay, 1000);
+
+//TODO:
+// Move the work time + break time logic into this file instead of popup

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Pomodoro Timer",
     "description": "Enhance productivity with intentional work and break periods.",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "action": {
       "default_popup": "./popup/popup.html",
       "default_icon": "./images/light-bulb.png"

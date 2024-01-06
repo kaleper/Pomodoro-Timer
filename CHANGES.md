@@ -21,7 +21,7 @@ Version 1.0.3 (01-01-2023)
 * background.js now uses chrome.storage;
     - Can be used to sync other settings 
     - Sound setting saved here and is synced between main.js, popup.js and background.js
-    - popup.js & main.js listen for changes
+    - popup.js &  listen for changes
 
 Version 1.0.4 (01-01-2023)
 ==========================
@@ -34,3 +34,7 @@ Version 1.0.5 (01-05-2023)
 * Added background image to main.html
     - Changed font colors for increased readability and centered elements
 * Added icon to extension page and added description.
+
+Version 1.0.6 (01-05-2023)
+==========================
+* Bug fixes with using work time + break times with the UI clock animation.

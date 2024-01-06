@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', updatePopup);
 // Updates timer - formats remaining time to be displayed 
 function updateDisplay() {
     chrome.runtime.sendMessage({ command: 'getRemainingTime' }, function (response) {
-        console.log(response.remainingTime);
         if (response && response.remainingTime) {
             const timerCircle = document.querySelector('.timer').querySelector('svg > circle + circle');
             document.querySelector('.timer').classList.add('animatable');
@@ -63,7 +62,7 @@ function updatePopup() {
 // Opens tab to extension's page
 document.getElementById("openMain").addEventListener('click', function () {
     chrome.tabs.create({
-        url: "main.html"
+        url: "./main/main.html"
       });
 })
 
